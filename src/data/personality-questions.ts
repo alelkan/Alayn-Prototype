@@ -1,0 +1,22 @@
+export const personalityQuestions = [
+  "How do you typically handle stressful situations?",
+  "What energizes you more: social gatherings or alone time?",
+  "How do you prefer to process your emotions?",
+  "What's your typical reaction to unexpected changes?",
+  "How do you make important decisions?",
+  "What role do routines play in your life?",
+  "How do you typically express your feelings?",
+  "What helps you feel most relaxed?",
+  "How do you handle conflict with others?",
+  "What's your preferred way of learning new things?",
+  "How do you recharge after a difficult day?",
+  "What motivates you to achieve your goals?",
+  "How do you handle criticism from others?",
+  "What's your approach to solving complex problems?",
+  "How do you maintain your relationships?",
+  "What role does creativity play in your life?",
+  "How do you handle change in your life?",
+  "What's your typical response to failure?",
+  "How do you prefer to communicate with others?",
+  "What gives you a sense of purpose?"
+];
