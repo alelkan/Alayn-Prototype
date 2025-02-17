@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import MoodTracker from "./mood-tracker";
 import UpcomingSessions from "./upcoming-sessions";
+import BaseCard from "./BaseCard";
 import "swiper/css";
 import "swiper/css/pagination";
 
@@ -24,14 +25,14 @@ export default function DashboardCards() {
         onSlideChange={(swiper) => setCurrentCard(CARDS[swiper.activeIndex])}
       >
         <SwiperSlide>
-          <div className="card">
+          <BaseCard>
             <MoodTracker />
-          </div>
+          </BaseCard>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="card">
+          <BaseCard>
             <UpcomingSessions />
-          </div>
+          </BaseCard>
         </SwiperSlide>
       </Swiper>
     </div>

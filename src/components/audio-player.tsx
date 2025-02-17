@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { FaPlay, FaPause, FaVolumeDown } from "react-icons/fa";
+import BaseCard from "./BaseCard";
 
 interface AudioPlayerProps {
   contentId: string;
@@ -18,27 +19,21 @@ export default function AudioPlayer({ contentId, title, description, duration }:
   const [volume, setVolume] = useState(1);
 
   const togglePlay = () => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio(`/api/content/${contentId}`);
-      audioRef.current.addEventListener("ended", () => {
-        setPlaying(false);
-      });
-    }
     if (playing) {
-      audioRef.current.pause();
-      setPlaying(false);
+      audioRef.current?.pause();
     } else {
-      audioRef.current.play();
-      setPlaying(true);
+      audioRef.current?.play();
     }
+    setPlaying(!playing);
   };
 
   const handleTimeUpdate = () => {
     if (audioRef.current) {
       const current = audioRef.current.currentTime;
-      const duration = audioRef.current.duration;
+      const duration = audioRef.current.duration || 1;
       setProgress((current / duration) * 100);
-      setCurrentTime(formatTime(current));
+      // Simple formatting – you can expand this as needed
+      setCurrentTime(Math.floor(current).toString());
     }
   };
 
@@ -65,7 +60,7 @@ export default function AudioPlayer({ contentId, title, description, duration }:
   };
 
   return (
-    <div className="card p-6 space-y-4">
+    <BaseCard className="p-6 space-y-4">
       <div className="space-y-2">
         <h2 className="text-xl font-semibold text-white">{title}</h2>
         <p className="text-white/60">{description}</p>
@@ -117,6 +112,6 @@ export default function AudioPlayer({ contentId, title, description, duration }:
           </div>
         </div>
       </div>
-    </div>
+    </BaseCard>
   );
 } 

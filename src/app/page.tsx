@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import UpcomingSessions from "@/components/upcoming-sessions";
-import DashboardCards from "@/components/dashboard-cards";
+import DashboardCards from "@/components/DashboardCards";
+import CardLink from "@/components/CardLink";
 import { FaUser, FaUserMd, FaBook, FaClipboardList, FaSpa } from "react-icons/fa";
 
 export default function Home() {
@@ -26,29 +27,29 @@ export default function Home() {
 
       {/* Navigation Grid */}
       <div className="grid grid-cols-2 gap-4">
-        <Link href="/therapy" className="card">
+        <CardLink href="/therapy" className="card--grid flex flex-col items-start gap-2">
           <FaUserMd className="text-2xl" />
           <h3 className="font-medium mt-2">Mental Counseling</h3>
           <p className="text-sm text-white/60"></p>
-        </Link>
+        </CardLink>
 
-        <Link href="/content" className="card">
+        <CardLink href="/content" className="card--grid flex flex-col items-start gap-2">
           <FaBook className="text-2xl" />
           <h3 className="font-medium mt-2">Content Library</h3>
           <p className="text-sm text-white/60">Explore resources</p>
-        </Link>
+        </CardLink>
 
-        <Link href="/assessment" className="card">
+        <CardLink href="/assessment" className="card--grid flex flex-col items-start gap-2">
           <FaClipboardList className="text-2xl" />
           <h3 className="font-medium mt-2">Personality Analysis</h3>
           <p className="text-sm text-white/60">Take assessment</p>
-        </Link>
+        </CardLink>
 
-        <Link href="/exercises" className="card">
+        <CardLink href="/exercises" className="card--grid flex flex-col items-start gap-2">
           <FaSpa className="text-2xl" />
           <h3 className="font-medium mt-2">Mindful Exercises</h3>
           <p className="text-sm text-white/60">Meditation &amp; more</p>
-        </Link>
+        </CardLink>
       </div>
     </div>
   );

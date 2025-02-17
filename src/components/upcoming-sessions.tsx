@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { SESSIONS } from "../data/sessions";
+import BaseCard from "./BaseCard";
 
 interface Session {
   id: string;
@@ -22,8 +23,8 @@ export default function UpcomingSessions() {
       
       {sessions.length > 0 ? (
         <div className="space-y-4">
-          {sessions.map(session => (
-            <div key={session.id} className="p-4 bg-secondary rounded-xl">
+          {sessions.map((session) => (
+            <BaseCard key={session.id} className="p-4">
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{session.therapistAvatar}</span>
                 <div>
@@ -39,7 +40,7 @@ export default function UpcomingSessions() {
                   Join Call
                 </button>
               </div>
-            </div>
+            </BaseCard>
           ))}
         </div>
       ) : (
