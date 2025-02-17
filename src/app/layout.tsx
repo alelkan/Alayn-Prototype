@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import MobileContainer from "@/components/mobile-container";
 import "./globals.css";
 import { MoodProvider } from "@/context/MoodContent";
+import GlobalBackHandler from "@/components/GlobalBackHandler";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +29,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <MoodProvider>
+          <GlobalBackHandler />
           <MobileContainer>{children}</MobileContainer>
         </MoodProvider>
       </body>

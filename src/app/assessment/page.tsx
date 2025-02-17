@@ -321,7 +321,7 @@ export default function Assessment() {
               </div>
             )}
 
-            {selectedContent && (
+            {selectedContent ? (
               <div className="card p-6">
                 <button 
                   onClick={() => setSelectedContent(null)}
@@ -335,6 +335,19 @@ export default function Assessment() {
                   description={selectedContent.description}
                   duration={selectedContent.duration}
                 />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-4">
+                {recommendedContent.map((content) => (
+                  <button
+                    key={content._id}
+                    onClick={() => setSelectedContent(content)}
+                    className="card p-4 text-left hover:border-accent transition-colors"
+                  >
+                    <h3 className="font-medium text-white">{content.title}</h3>
+                    <p className="text-sm text-white/60">{content.description}</p>
+                  </button>
+                ))}
               </div>
             )}
           </div>

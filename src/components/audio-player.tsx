@@ -2,7 +2,6 @@
 
 import React, { useRef, useState } from "react";
 import { FaPlay, FaPause, FaVolumeDown } from "react-icons/fa";
-import BaseCard from "./BaseCard";
 
 interface AudioPlayerProps {
   contentId: string;
@@ -15,7 +14,7 @@ export default function AudioPlayer({ contentId, title, description, duration }:
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [currentTime, setCurrentTime] = useState("0:00");
+  const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(1);
 
   const togglePlay = () => {
@@ -32,8 +31,7 @@ export default function AudioPlayer({ contentId, title, description, duration }:
       const current = audioRef.current.currentTime;
       const duration = audioRef.current.duration || 1;
       setProgress((current / duration) * 100);
-      // Simple formatting – you can expand this as needed
-      setCurrentTime(Math.floor(current).toString());
+      setCurrentTime(current);
     }
   };
 
@@ -54,64 +52,53 @@ export default function AudioPlayer({ contentId, title, description, duration }:
   };
 
   const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   return (
-    <BaseCard className="p-6 space-y-4">
-      <div className="space-y-2">
-        <h2 className="text-xl font-semibold text-white">{title}</h2>
-        <p className="text-white/60">{description}</p>
+    <div className="p-6 bg-secondary/20 rounded-2xl shadow-lg space-y-4">
+      <div className="flex flex-col space-y-1">
+        <h2 className="text-2xl font-semibold text-white">{title}</h2>
+        <p className="text-sm text-white/70">{description}</p>
       </div>
-
       <audio
         ref={audioRef}
         src={`/api/content/${contentId}`}
         onTimeUpdate={handleTimeUpdate}
         onEnded={() => setPlaying(false)}
       />
-      
-      <div className="space-y-4">
-        <div 
-          className="h-2 bg-secondary rounded-full cursor-pointer"
-          onClick={handleProgressClick}
+      <div className="relative h-3 bg-white/10 rounded-full cursor-pointer" onClick={handleProgressClick}>
+        <div
+          className="absolute left-0 top-0 h-3 bg-accent rounded-full transition-all"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+      <div className="flex items-center justify-between text-sm text-white/70">
+        <span>{formatTime(currentTime)}</span>
+        <span>{duration}</span>
+      </div>
+      <div className="flex items-center justify-between">
+        <button
+          onClick={togglePlay}
+          className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-accent to-purple-500 shadow-lg text-3xl text-white hover:scale-105 transform transition"
         >
-          <div 
-            className="h-full bg-accent rounded-full transition-all"
-            style={{ width: `${progress}%` }}
+          {playing ? <FaPause /> : <FaPlay />}
+        </button>
+        <div className="flex items-center gap-3">
+          <FaVolumeDown className="text-xl text-white" />
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={volume}
+            onChange={handleVolumeChange}
+            className="w-32 h-2 bg-white/20 rounded-full accent-accent"
           />
         </div>
-
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-white/60">{currentTime}</span>
-          <span className="text-sm text-white/60">{duration}</span>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div onClick={togglePlay} className="cursor-pointer text-2xl">
-              {playing ? <FaPause /> : <FaPlay />}
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <span className="text-base">
-                <FaVolumeDown />
-              </span>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.1"
-                value={volume}
-                onChange={handleVolumeChange}
-                className="w-24"
-              />
-            </div>
-          </div>
-        </div>
       </div>
-    </BaseCard>
+    </div>
   );
 } 

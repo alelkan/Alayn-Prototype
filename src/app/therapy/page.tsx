@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/page-header";
 import { TabNavigation } from "@/components/tab-navigation";
 import { THERAPISTS } from "@/data/therapists";
 import { YouTubePlayer } from "@/components/youtube-player";
+import { useBackButtonHandler } from "@/hooks/useBackButtonHandler";
 
 const TABS = [
   { id: "doctors", label: "Book a Session" },
@@ -16,6 +17,12 @@ const TABS = [
 
 export default function TherapyPage() {
   const router = useRouter();
+
+  // Implement backHandler to navigate to the previous page
+  useBackButtonHandler(() => {
+    router.back();
+  });
+
   const [activeSection, setActiveSection] = useState<"doctors" | "workshops" | "videos">("doctors");
   const [selectedTherapist, setSelectedTherapist] = useState<number | null>(null);
 

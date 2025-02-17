@@ -4,6 +4,7 @@ import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { SESSIONS } from "../data/sessions";
 import BaseCard from "./BaseCard";
+import { FaUserMd } from "react-icons/fa";
 
 interface Session {
   id: string;
@@ -26,7 +27,7 @@ export default function UpcomingSessions() {
           {sessions.map((session) => (
             <BaseCard key={session.id} className="p-4">
               <div className="flex items-center gap-3">
-                <span className="text-2xl">{session.therapistAvatar}</span>
+                <span className="text-2xl"><FaUserMd/></span>
                 <div>
                   <h3 className="font-medium">{session.therapistName}</h3>
                   <p className="text-sm text-white/60">{session.type}</p>
