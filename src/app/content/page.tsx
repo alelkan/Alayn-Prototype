@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/page-header";
 import AudioPlayer from "@/components/audio-player";
 import InfoButton from "@/components/info-button";
 import { CONTENT } from "@/data/content";
+import { FaPlay } from "react-icons/fa";
 
 const TABS = [
   { id: "podcast", label: "Podcasts" },
@@ -70,7 +71,7 @@ export default function ContentPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-white/60">{item.duration}</span>
-                    <span className="text-2xl">▶️</span>
+                    <span className="text-2xl"><FaPlay/></span>
                   </div>
                 </div>
               </button>

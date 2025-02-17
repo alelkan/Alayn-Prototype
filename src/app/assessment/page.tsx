@@ -22,6 +22,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { toast } from "react-hot-toast";
+import { FaPlay } from "react-icons/fa";
 
 interface AnalysisResult {
   dominantMood: MoodType;
@@ -95,7 +96,9 @@ const ContentSection = ({ section, onSelect }: ContentSectionProps) => {
                   <p className="text-sm text-white/60">{content.description}</p>
                   <span className="text-xs text-white/40">{content.duration}</span>
                 </div>
-                <span className="text-2xl">▶️</span>
+                <span className="text-2xl">
+                  <FaPlay className="text-2xl" />
+                </span>
               </div>
             </button>
           </SwiperSlide>

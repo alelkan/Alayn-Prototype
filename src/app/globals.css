@@ -3,13 +3,20 @@
 @tailwind utilities;
 
 :root {
-  /* Black and White Theme */
-  --primary: #000000;    /* Pure Black */
-  --secondary: #333333;  /* Dark Gray */
-  --accent: #666666;     /* Medium Gray */
-  --success: #444444;    /* Darker Gray */
-  --text: #FFFFFF;       /* White text */
-  --card-bg: #1A1A1A;    /* Very Dark Gray for Cards */
+  /* Vibrant gradient variables */
+  --gradient-start: #FF416C;
+  --gradient-end: #FF4B2B;
+
+  /* Use a gradient as the primary background */
+  --primary: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  
+  --secondary: #333333;
+  --accent: #FF6F61;
+  --success: #444444;
+  --text: #FFFFFF;
+  
+  /* Glassy card background */
+  --card-bg: rgba(0, 0, 0, 0.4);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -29,26 +36,33 @@ body {
 /* Component Styles */
 @layer components {
   .quick-action-button {
-    @apply flex flex-col items-center justify-center p-3 rounded-full 
-           bg-secondary hover:bg-card-bg transition-colors duration-200 
-           w-14 h-14 text-white;
+    @apply flex flex-col items-center justify-center p-3 rounded-full transition-colors duration-200 w-14 h-14 text-white;
+    background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   }
+
+  /* Glassy Card Style */
   .card {
-    @apply p-6 bg-card-bg rounded-2xl border border-secondary;
+    @apply p-6 rounded-2xl relative overflow-hidden;
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   }
+
   .input {
-    @apply w-full p-4 rounded-xl border border-secondary bg-secondary 
-           focus:ring-2 focus:ring-accent focus:border-transparent outline-none 
-           text-white placeholder-gray-400;
+    @apply w-full p-4 rounded-xl border border-secondary bg-secondary focus:ring-2 focus:ring-accent focus:border-transparent outline-none text-white placeholder-gray-400;
   }
-  /* Unified Button Style */
+  
+  /* Unified Button Style with a vibrant, gradient background and subtle box shadow */
   .btn {
     @apply px-4 py-2 rounded-md font-medium transition-colors;
-    background: var(--secondary);
+    background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
     color: var(--text);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   }
   .btn:hover {
-    background: var(--accent);
+    background: linear-gradient(45deg, var(--gradient-end), var(--gradient-start));
   }
 }
 

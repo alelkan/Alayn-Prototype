@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/page-header";
 import AudioPlayer from "@/components/audio-player";
 import { MoodType } from "@/components/mood-tracker";
 import InfoButton from "@/components/info-button";
+import { FaPlay } from "react-icons/fa";
 
 const TABS = [
   { id: "mindset", label: "Mindset" },
@@ -138,7 +139,9 @@ export default function ExercisesPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-white/60">{exercise.duration}</span>
-                    <span className="text-2xl">▶️</span>
+                    <span className="text-2xl">
+                      <FaPlay className="text-2xl" />
+                    </span>
                   </div>
                 </div>
               </button>

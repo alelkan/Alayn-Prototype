@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { FaPlay, FaPause, FaVolumeDown } from "react-icons/fa";
 
 interface AudioPlayerProps {
   contentId: string;
@@ -10,20 +11,25 @@ interface AudioPlayerProps {
 }
 
 export default function AudioPlayer({ contentId, title, description, duration }: AudioPlayerProps) {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState("0:00");
   const [volume, setVolume] = useState(1);
 
   const togglePlay = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
+    if (!audioRef.current) {
+      audioRef.current = new Audio(`/api/content/${contentId}`);
+      audioRef.current.addEventListener("ended", () => {
+        setPlaying(false);
+      });
+    }
+    if (playing) {
+      audioRef.current.pause();
+      setPlaying(false);
+    } else {
+      audioRef.current.play();
+      setPlaying(true);
     }
   };
 
@@ -69,7 +75,7 @@ export default function AudioPlayer({ contentId, title, description, duration }:
         ref={audioRef}
         src={`/api/content/${contentId}`}
         onTimeUpdate={handleTimeUpdate}
-        onEnded={() => setIsPlaying(false)}
+        onEnded={() => setPlaying(false)}
       />
       
       <div className="space-y-4">
@@ -90,15 +96,14 @@ export default function AudioPlayer({ contentId, title, description, duration }:
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button
-              onClick={togglePlay}
-              className="w-12 h-12 rounded-full bg-accent flex items-center justify-center"
-            >
-              {isPlaying ? "⏸️" : "▶️"}
-            </button>
+            <div onClick={togglePlay} className="cursor-pointer text-2xl">
+              {playing ? <FaPause /> : <FaPlay />}
+            </div>
             
             <div className="flex items-center gap-2">
-              <span className="text-lg">🔈</span>
+              <span className="text-base">
+                <FaVolumeDown />
+              </span>
               <input
                 type="range"
                 min="0"

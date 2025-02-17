@@ -1,0 +1,17 @@
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--accent); /* Change this if needed; for example: rgba(255,255,255,0.5) */
+  transform: scale(0);
+  opacity: 0.75;
+  pointer-events: none;
+  animation: ripple-animation 1s ease-out;
+  z-index: 10;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+} 

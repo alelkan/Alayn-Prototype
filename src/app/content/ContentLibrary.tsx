@@ -7,16 +7,8 @@ import { PageHeader } from "@/components/page-header";
 import AudioPlayer from "@/components/audio-player";
 import { MOODS, MoodType } from "@/components/mood-tracker";
 import InfoButton from "@/components/info-button";
-import { CONTENT } from '@/data/content';
-
-export interface Content {
-  _id: string;
-  title: string;
-  description: string;
-  duration: string;
-  type: "podcast" | "audiobook" | "music";
-  tags: MoodType[];
-}
+import { CONTENT } from "@/data/content";
+import { useMood } from "@/context/MoodContent";
 
 const TABS = [
   { id: "podcast", label: "Podcasts" },
@@ -25,95 +17,85 @@ const TABS = [
 
 export default function ContentLibrary() {
   const searchParams = useSearchParams();
-  const moodParam = searchParams.get("mood") as MoodType | null;
-  const router = useRouter();
+  const moodParamFromUrl = searchParams.get("mood") as MoodType | null;
+  const { mood } = useMood();
+  // Prefer the mood from context; if not available, fall back to URL parameter
+  const activeMood = mood || moodParamFromUrl;
 
-  const [content, setContent] = useState<Content[]>([]);
+  const router = useRouter();
+  const [content, setContent] = useState<typeof CONTENT>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedContent, setSelectedContent] = useState<Content | null>(null);
+  const [selectedContent, setSelectedContent] = useState<typeof CONTENT[number] | null>(null);
   const [activeTab, setActiveTab] = useState("podcast");
 
   const fetchContent = useCallback(async () => {
     setLoading(true);
     try {
-      const filteredContent = CONTENT.filter(item => 
-        item.type === activeTab && 
-        (!moodParam || item.tags.includes(moodParam))
-      );
+      // Get all content items of the active type
+      let filteredContent = CONTENT.filter((item) => item.type === activeTab);
+
+      // If an active mood exists, sort the content so items with a matching mood tag appear first.
+      if (activeMood) {
+        filteredContent.sort((a, b) => {
+          const aHas = a.tags.includes(activeMood) ? 1 : 0;
+          const bHas = b.tags.includes(activeMood) ? 1 : 0;
+          // Items with the mood tag will have a higher value and thus come first.
+          return bHas - aHas;
+        });
+      }
+
       setContent(filteredContent);
     } catch (error) {
       console.error("Failed to fetch content:", error);
     } finally {
       setLoading(false);
     }
-  }, [activeTab, moodParam]);
+  }, [activeTab, activeMood]);
 
   useEffect(() => {
     fetchContent();
   }, [fetchContent]);
 
   return (
-    <div className="min-h-screen p-4 bg-primary">
-      <div className="max-w-4xl mx-auto space-y-6">
-        <PageHeader
-          title="Content Library"
-          description="Explore our collection of podcasts and life books"
-          showBackButton
-          onBack={() => router.push("/")}
-          infoTitle="Content Library"
-          infoDescription="Access our curated collection of audio content..."
-        />
-        <TabNavigation
-          tabs={TABS}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-        />
-        {selectedContent ? (
-          <div className="card p-6">
-            <button
-              onClick={() => setSelectedContent(null)}
-              className="text-white/60 hover:text-white mb-4"
-            >
-              ← Back to list
-            </button>
-            <AudioPlayer
-              contentId={selectedContent._id}
-              title={selectedContent.title}
-              description={selectedContent.description}
-              duration={selectedContent.duration}
-            />
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {loading ? (
-              <div className="text-white/60 text-center py-8">Loading...</div>
-            ) : content.length > 0 ? (
-              content.map((item) => (
-                <button
-                  key={item._id}
-                  className="w-full text-left card p-4 hover:border-accent transition-colors"
-                  onClick={() => setSelectedContent(item)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-medium text-white">{item.title}</h3>
-                      <p className="text-sm text-white/60">{item.description}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-white/60">{item.duration}</span>
-                      <span className="text-2xl">▶️</span>
-                    </div>
-                  </div>
-                </button>
-              ))
-            ) : (
-              <div className="text-white/60 text-center py-8">
-                No content available for this category
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+    <div className="p-4">
+      <PageHeader title="Content Library" />
+      {activeMood && (
+        <div className="mb-4 text-white">
+          <strong>Current Mood:</strong>{" "}
+          {activeMood.charAt(0).toUpperCase() + activeMood.slice(1)}
+        </div>
+      )}
+      <TabNavigation tabs={TABS} activeTab={activeTab} onTabChange={setActiveTab} />
+      {loading ? (
+        <div className="text-white">Loading content...</div>
+      ) : (
+        <div className="grid grid-cols-1 gap-4">
+          {content.map((item) => (
+            <div key={item._id} className="card p-4">
+              <h3 className="text-xl font-bold text-white">{item.title}</h3>
+              <p className="text-white/70">{item.description}</p>
+              <p className="text-white/70">Duration: {item.duration}</p>
+              {item.tags && (
+                <div className="flex gap-2 mt-2">
+                  {item.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-xs text-white/60 border border-white/40 rounded px-1"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+          {content.length === 0 && (
+            <div className="text-white">
+              No content available for your current mood.
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
-} 
+}

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaInfoCircle } from "react-icons/fa";
 
 interface InfoButtonProps {
   title: string;
@@ -17,7 +18,7 @@ export default function InfoButton({ title, description }: InfoButtonProps) {
         onClick={() => setIsOpen(true)}
         className="absolute right-4 top-4 w-8 h-8 rounded-full bg-secondary/50 flex items-center justify-center text-white/60 hover:bg-secondary transition-colors"
       >
-        ℹ️
+        <FaInfoCircle className="w-full h-full" />
       </button>
 
       <AnimatePresence>

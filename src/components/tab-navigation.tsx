@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 interface Tab {
   id: string;
   label: string;
@@ -20,7 +22,7 @@ export function TabNavigation({ tabs, activeTab, onTabChange }: TabNavigationPro
           onClick={() => onTabChange(tab.id)}
           className={`px-4 py-2 ${
             activeTab === tab.id
-              ? "text-accent border-b-2 border-accent"
+              ? "text-white border-b-2 border-white"
               : "text-white/60 hover:text-white/80"
           }`}
         >

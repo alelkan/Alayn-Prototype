@@ -5,20 +5,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import MoodTracker from "./mood-tracker";
 import UpcomingSessions from "./upcoming-sessions";
-import { useRouter } from 'next/navigation';
-import { MoodType } from "./mood-tracker";
 import "swiper/css";
 import "swiper/css/pagination";
 
 const CARDS = ["mood", "sessions"] as const;
 
 export default function DashboardCards() {
-  const router = useRouter();
   const [currentCard, setCurrentCard] = useState<typeof CARDS[number]>("mood");
-
-  const handleMoodSelect = (mood: MoodType) => {
-    router.push(`/content?mood=${mood}`);
-  };
 
   return (
     <div className="relative">
@@ -32,7 +25,7 @@ export default function DashboardCards() {
       >
         <SwiperSlide>
           <div className="card">
-            <MoodTracker onMoodSelect={handleMoodSelect} />
+            <MoodTracker />
           </div>
         </SwiperSlide>
         <SwiperSlide>
