@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import TherapistList from "@/components/therapist-list";
-import { TabNavigation } from "@/components/tab-navigation";
 import { PageHeader } from "@/components/page-header";
+import { TabNavigation } from "@/components/tab-navigation";
 import { THERAPISTS } from "@/data/therapists";
 import { YouTubePlayer } from "@/components/youtube-player";
 
@@ -17,24 +17,35 @@ const TABS = [
 export default function TherapyPage() {
   const router = useRouter();
   const [activeSection, setActiveSection] = useState<"doctors" | "workshops" | "videos">("doctors");
+  const [selectedTherapist, setSelectedTherapist] = useState<number | null>(null);
 
   return (
     <div className="min-h-screen p-4 bg-primary">
       <div className="max-w-4xl mx-auto space-y-6">
-        <PageHeader
-          title="Mental Health Support"
-          description="Book sessions, join workshops, or watch educational content"
-          showBackButton
-          onBack={() => router.push("/")}
-        />
+        {selectedTherapist === null && (
+          <>
+            <PageHeader
+              title="Mental Counseling"
+              description="Book sessions, join workshops, or watch educational content"
+              showBackButton
+              onBack={() => router.push("/")}
+              infoTitle="Therapy Info"
+              infoDescription="Our experts are here to support you."
+            />
+            <TabNavigation
+              tabs={TABS}
+              activeTab={activeSection}
+              onTabChange={(tab) => setActiveSection(tab as typeof activeSection)}
+            />
+          </>
+        )}
 
-        <TabNavigation
-          tabs={TABS}
-          activeTab={activeSection}
-          onTabChange={(tab) => setActiveSection(tab as typeof activeSection)}
-        />
-
-        {activeSection === "doctors" && <TherapistList />}
+        {activeSection === "doctors" && (
+          <TherapistList
+            selectedTherapist={selectedTherapist}
+            setSelectedTherapist={setSelectedTherapist}
+          />
+        )}
         {activeSection === "workshops" && <WorkshopsSection />}
         {activeSection === "videos" && <VideosSection />}
       </div>
